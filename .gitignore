@@ -6,7 +6,7 @@ __pycache__/
 env/
 .env/
 .vscode/
-logs/*
+# logs/
 media/
 static/
 tmp/*
