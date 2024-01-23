@@ -58,5 +58,17 @@
     "scraping_site": 1,
     "description": "Вакансии в web3 сфере (блокчейн, крипта) за всё время и на русском языке."
   }
+},
+{
+  "model": "vacancy.scrapinglink",
+  "pk": 4,
+  "fields": {
+    "created": "2024-01-23T21:16:02.001Z",
+    "modified": "2024-01-23T21:16:02.001Z",
+    "skill": "web3",
+    "link": "https://career.habr.com/vacancies?q=web3&sort=date&type=all",
+    "scraping_site": 2,
+    "description": "Вакансии для разработчиков web3 за всё время, отсортированные по дате."
+  }
 }
 ]
