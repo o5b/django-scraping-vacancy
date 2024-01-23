@@ -14,4 +14,6 @@ tmp/
 .DS_Store
 db.sqlite3
 package-lock.json
-settings/local_settings.py
+settings/whoosh*
+# local_settings.py added for example, should be removed in production
+# settings/local_settings.py
