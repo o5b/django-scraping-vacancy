@@ -14,3 +14,4 @@ django-split-settings
 django-cleanup
 django-import-export
 setuptools
+pytz

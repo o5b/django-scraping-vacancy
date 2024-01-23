@@ -8,9 +8,9 @@
 
 ```bash
 # клонируем репозиторий
-git clone https://github.com/...git
+git clone https://github.com/o5b/django-scraping-vacancy.git
 # переходим в папку проекта
-cd vacancy/
+cd django-scraping-vacancy/
 # устанавливаем и активируем виртуальное окружение
 python3.12 -m venv env
 source env/bin/activate
@@ -26,7 +26,7 @@ pip install -r requirements/local.txt
 
 ```bash
 # переходим в папку проекта
-cd vacancy/
+cd django-scraping-vacancy/
 # если ещё не активировали, то активируем виртуальное окружение
 source env/bin/activate
 # для создания базы данных
@@ -43,7 +43,7 @@ python manage.py rebuild_index
 
 ```bash
 # переходим в папку проекта
-cd vacancy/
+cd django-scraping-vacancy/
 # если ещё не активировали, то активируем виртуальное окружение
 source env/bin/activate
 # запуск сервера
@@ -89,7 +89,7 @@ http://127.0.0.1:8000/admin/vacancy/scrapinglink/
 2. **Второй вариант - Загрузка нужных данных в бд**
 ```bash
 # переходим в папку проекта
-cd vacancy/
+cd django-scraping-vacancy/
 # если ещё не запустили, то запускаем виртуальное окружение
 source env/bin/activate
 # загрузка данных в бд:
@@ -107,7 +107,7 @@ python manage.py loaddata fixtures/vacancy_full_db.json
 
 ```bash
 # переходим в папку проекта
-cd vacancy/
+cd django-scraping-vacancy/
 # если ещё не запустили, то запускаем виртуальное окружение
 source env/bin/activate
 # справка по команде скрапинга вакансий
@@ -138,6 +138,8 @@ python manage.py scraping_vacancy --website https://career.habr.com --skill pyth
 ---/styles    - collectstatic перемещает файлы из этой папки в `/static/styles/`
 /settings     - настройки django
 /fixtures     - тестовые данные для наполнения бд
+/logs         - для хранения логов
+/tmp          - для временных файлов
 ```
 
 ## Описание некоторых пакетов

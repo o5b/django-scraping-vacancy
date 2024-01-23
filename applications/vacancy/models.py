@@ -6,7 +6,7 @@ from applications.core import models as core_models
 
 class VacancySite(core_models.Date):
     """
-    Сайт откуда вакансии
+    Сайт откуда взяты вакансии
     """
 
     class Country(models.TextChoices):
@@ -55,7 +55,7 @@ class VacancySite(core_models.Date):
 
 class ScrapingLink(core_models.Date):
     """
-    Ссылка для скрапинга
+    Ссылка для скрапинга вакансий
     """
 
     skill = models.CharField(

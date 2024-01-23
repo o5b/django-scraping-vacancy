@@ -6,10 +6,10 @@ __pycache__/
 env/
 .env/
 .vscode/
-logs/
+logs/*
 media/
 static/
-tmp/
+tmp/*
 
 .DS_Store
 db.sqlite3

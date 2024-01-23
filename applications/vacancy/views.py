@@ -73,9 +73,7 @@ class VacancySearchView(SearchView):
                 body_results = qs.autocomplete(body_auto=q).filter(created__gte=start_date)
             else:
                 title_results = qs.autocomplete(title_auto=q)
-                print('title_results: ', len(title_results))
                 body_results = qs.autocomplete(body_auto=q)
-                print('body_results: ', len(body_results))
 
             results = title_results | body_results
 
@@ -85,7 +83,6 @@ class VacancySearchView(SearchView):
             elif sort_by == 'old':
                 results = results.order_by('datetime')
 
-        print('results : ', len(results))
         return results
 
     def get_context_data(self, *args, **kwargs):
@@ -94,7 +91,6 @@ class VacancySearchView(SearchView):
         return context
 
     def form_valid(self, form):
-        # self.queryset = form.search()
         self.queryset = self.get_search_result()
         context = self.get_context_data(
             **{
@@ -103,5 +99,4 @@ class VacancySearchView(SearchView):
                 "object_list": self.queryset,
             }
         )
-        print('form_valid >> context: ', context)
         return self.render_to_response(context)
