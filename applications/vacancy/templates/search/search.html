@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load highlight %}
+{% load core_tags %}
+{% load static %}
+
+
+{% block title %}Поиск{% endblock %}
+
+
+{% block content %}
+    <section>
+        <h2 style="text-align: center;">Найти работу</h2>
+
+        <form id="searchForm" action="{% url 'vacancy:haystack_search' %}" class="autocomplete" method="get">
+            {% csrf_token %}
+
+            <label for="q">Вакансия:</label>
+            <input type="text" id="q" name="q" placeholder="Введите слово для поиска"  autocomplete="off" required>
+
+            <label for="id_start_day">За время:</label>
+            <select id="id_start_day" name="start_day" size="7">
+                <option value="1">1 день</option>
+                <option value="3">3 дня</option>
+                <option value="7">7 дней</option>
+                <option value="10">10 дней</option>
+                <option value="14">14 дней</option>
+                <option value="30">30 дней</option>
+                <option value="364">за год</option>
+            </select>
+
+            <label for="id_sort_by">Сортировать результаты поиска:</label>
+            <select id="id_sort_by" name="sort_by" size="2">
+              <option value="new">Сначало новые</option>
+              <option value="old">Сначало старые</option>
+            </select>
+
+            <br />
+            <button type="submit">Найти</button>
+        </form>
+
+        <div class="js-autocomplete-result"></div>
+
+        <div class="search-results">
+            {% if query %}
+                <h5>
+                    <span class="highlighted">{{ results_count }}</span>
+                    {{ results_count|ru_plural:'результат,результата,результатов' }}
+                    поиска для <span class="highlighted">{{ query }}</span>
+                </h5>
+
+                {% include 'pagination.html' with page=page_obj %}
+
+                {% for result in page_obj.object_list %}
+                    <p>
+                        <a href="{{ result.object.get_absolute_url }}">
+                          {% highlight result.object.title with query html_tag "span" css_class "highlighted"  max_length 200 %}
+                        </a>
+                    </p>
+                    <p>{% highlight result.object.body with query html_tag "span" css_class "highlighted"  max_length 2000 %}</p>
+                {% empty %}
+                    <p>Ничего не найдено.</p>
+                {% endfor %}
+
+                {% include 'pagination.html' with page=page_obj %}
+            {% endif %}
+        </div>
+    </section>
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+    <script type="text/javascript">
+        // https://django-haystack.readthedocs.io/en/latest/autocomplete.html#example-implementation
+        var Autocomplete = function(options) {
+          this.form_selector = options.form_selector
+          this.url = options.url || '/vacancy/autocomplete/'
+          this.delay = parseInt(options.delay || 300)
+          this.minimum_length = parseInt(options.minimum_length || 3)
+          this.form_elem = null
+          this.query_box = null
+          this.result_selector = options.result_selector
+        }
+
+        Autocomplete.prototype.setup = function() {
+          var self = this
+
+          this.form_elem = $(this.form_selector)
+          this.query_box = this.form_elem.find('input[name=q]')
+          this.result_selector = $(this.result_selector)
+
+          // Watch the input box.
+          this.query_box.on('keyup', function() {
+            var query = self.query_box.val()
+
+            if(query.length < self.minimum_length) {
+              return false
+            }
+
+            self.fetch(query)
+          })
+
+          // On selecting a result, populate the search field.
+          this.form_elem.on('click', '.ac-result', function(ev) {
+            self.query_box.val($(this).text())
+            $('.ac-results').remove()
+            return false
+          })
+        }
+
+        Autocomplete.prototype.fetch = function(query) {
+          var self = this
+
+          $.ajax({
+            url: this.url
+          , data: {
+              'q': query
+            }
+          , success: function(data) {
+              self.show_results(data)
+            }
+          })
+        }
+
+        Autocomplete.prototype.show_results = function(data) {
+          // Remove any existing results.
+          $('.ac-results').remove()
+          $('.search-results').remove()
+
+          var results = data.results || []
+          var results_wrapper = $('<div class="ac-results"></div>')
+          var results_length = $('<div class="results_length"></div>')
+          var base_elem = $('<div class="result-wrapper"><a href="#" class="ac-result"></a></div>')
+
+          if(results.length > 0) {
+            results_wrapper.append(results_length.text(results.length + ' результатов'))
+            for(var res_offset in results) {
+              var elem = base_elem.clone()
+              // Don't use .html(...) here, as you open yourself to XSS.
+              // Really, you should use some form of templating.
+              elem.find('.ac-result').text(results[res_offset][0]).attr('href', '/vacancy/' + results[res_offset][1] + '/')
+              results_wrapper.append(elem)
+            }
+          }
+          else {
+            var elem = base_elem.clone()
+            elem.text("Ни чего не найдено.")
+            results_wrapper.append(elem)
+          }
+
+          this.result_selector.append(results_wrapper)
+        }
+
+        $(document).ready(function() {
+          window.autocomplete = new Autocomplete({
+            form_selector: '.autocomplete',
+            url: '{% url "vacancy:autocomplete" %}',
+            result_selector: '.js-autocomplete-result'
+          })
+          window.autocomplete.setup()
+        })
+    </script>
+
+{% endblock %}

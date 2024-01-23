@@ -1,0 +1,16 @@
+django==4.2.7
+django-haystack
+whoosh
+beautifulsoup4
+requests
+pytils
+django-extensions
+django-ckeditor
+pillow
+singlemodeladmin
+django-object-actions
+django-model-utils
+django-split-settings
+django-cleanup
+django-import-export
+setuptools

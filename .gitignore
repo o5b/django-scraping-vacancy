@@ -1,0 +1,17 @@
+*.log
+*.pot
+*.pyc
+
+__pycache__/
+env/
+.env/
+.vscode/
+logs/
+media/
+static/
+tmp/
+
+.DS_Store
+db.sqlite3
+package-lock.json
+settings/local_settings.py

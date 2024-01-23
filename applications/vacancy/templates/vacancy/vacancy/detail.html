@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+
+
+{% block title %}{{ vacancy.title }}{% endblock %}
+
+
+{% block content %}
+    <section>
+        <h1>{{ vacancy.title }}</h1>
+
+        <p class="date">{{ vacancy.source_site }}, {{ vacancy.date }}</p>
+        <p><b>Компания:</b> <a href="{{ vacancy.company.get_absolute_url }}">{{ vacancy.company }}</a></p>
+
+        {% if vacancy.company.industry %}
+            <p><b>Отрасль: {{ vacancy.company.industry }}</b></p>
+        {% endif %}
+
+        {{ vacancy.body|safe }}
+
+        {% for k, v in vacancy_dict.items %}
+            {% if k not in stop_field %}
+                {% if v %}<p><b>{{ vacancy|verbose_name:k }} ({{ k }})</b>: {{ v|safe }}</p>{% endif %}
+            {% endif %}
+        {% endfor %}
+    </section>
+{% endblock %}

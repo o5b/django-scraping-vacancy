@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load highlight %}
+{% load core_tags %}
+
+
+{% block title %}Вакансии{% endblock %}
+
+
+{% block content %}
+  <section>
+    <h1 style="text-align: center;">Вакансии</h1>
+
+    <h5>
+        Всего <span class="highlighted">{{ vacancies_count }}</span>
+        {{ vacancies_count|ru_plural:'вакансия,вакансии,вакансий' }}
+    </h5>
+
+    {% for vacancy in vacancies %}
+      <div>
+        <h2><a href="{{ vacancy.get_absolute_url }}">{{ vacancy.title }}</a></h2>
+
+        <p class="date">{{ vacancy.source_site }}, {{ vacancy.date }}</p>
+
+        {% if vacancy.salary %}<p class="date">{{ vacancy.salary }}</p>{% endif %}
+
+        <p>{{ vacancy.body|safe|truncatewords_html:100 }}</p>
+      </div>
+    {% endfor %}
+
+  </section>
+{% endblock %}

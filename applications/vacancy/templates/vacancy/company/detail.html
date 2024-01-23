@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load core_tags %}
+
+
+{% block title %}{{ company.name }}{% endblock %}
+
+
+{% block content %}
+  <section>
+    <h1>{{ company.name }}</h1>
+
+    <p class="date">{{ company.source }}, {{ company.created }}</p>
+
+    {% for k, v in  company_dict.items %}
+      {% if k not in stop_field %}
+        {% if v %}<p><b>{{ company|verbose_name:k }} ({{ k }})</b>: {{ v|safe }}</p>{% endif %}
+      {% endif %}
+    {% endfor %}
+
+    {% if company.photo %}<p><b>Фотографии:</b></p>{% endif %}
+    {% for p in company.photo %}
+      <img src={{ p }} />
+    {% endfor %}
+
+    {% if company.video %}<p><b>Видео:</b></p>
+      {% for video_url in company.video %}
+        {% if 'youtube' in video_url %}
+          <div>
+            <iframe src="https://www.youtube.com/embed/{{ video_url|get_youtube_id }}?controls=0&start=22&showinfo=0&rel=0&autoplay=0&mute=1&loop=1&playlist={{ video_url|get_youtube_id }}" frameborder="0" allowfullscreen></iframe>
+          </div>
+          {% comment %} альтернативые варианты {% endcomment %}
+          <div><img src="https://img.youtube.com/vi/{{ video_url|get_youtube_id }}/0.jpg" width="100px"></div>
+
+          <div><img src="https://img.youtube.com/vi/{{ video_url|get_youtube_id }}/maxresdefault.jpg"></div>
+
+          <div>
+            <video src="{{ video_url }}" controls autobuffer poster="https://img.youtube.com/vi/{{ video_url|get_youtube_id }}/0.jpg" width="640">
+              К сожалению, ваш браузер не поддерживает встроенные видео, но не волнуйтесь, вы можете
+              <a href="{{ video_url }}">загрузить его</a>
+              и просмотреть в вашем любимом плеере!
+            </video>
+          </div>
+
+          <div>
+            <a href="{{ video_url }}">{{ video_url }}</a>
+          </div>
+        {% else %}
+          <div><iframe src="{{ video_url }}" frameborder="0" allowfullscreen></iframe></div>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+  </section>
+{% endblock %}

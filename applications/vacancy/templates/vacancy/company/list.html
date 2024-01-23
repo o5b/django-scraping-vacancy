@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load highlight %}
+{% load core_tags %}
+
+
+{% block title %}Компании{% endblock %}
+
+
+{% block content %}
+    <section>
+        <h1 style="text-align: center;">Компании</h1>
+
+        <h5>
+            Всего <span class="highlighted">{{ companies_count }}</span>
+            {{ companies_count|ru_plural:'компания,компании,компаний' }}
+        </h5>
+
+        {% for company in companies %}
+            <div>
+                <h2>
+                    <a href="{{ company.get_absolute_url }}">{{ company.name }}</a>
+                </h2>
+
+              <p class="date">{{ company.source }}, {{ company.created }}</p>
+
+                {% if company.about %}
+                    <p>{{ company.about|safe|truncatewords:100|linebreaks }}</p>
+                {% else %}
+                    <p>{{ company.about_short|safe|truncatewords:100|linebreaks }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+    </section>
+{% endblock %}

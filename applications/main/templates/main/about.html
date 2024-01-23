@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+
+{% block title %}О нас{% endblock title %}
+
+
+{% block content %}
+	<section>
+        <div>{{ object.content|safe }}</div>
+	</section>
+{% endblock content %}
