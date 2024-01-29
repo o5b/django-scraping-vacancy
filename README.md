@@ -123,14 +123,14 @@ http://127.0.0.1:8000/admin/vacancy/scrapinglink/
 Например, для поиска вакансий по навыку "python"
 
 для Хабр Карьера:
-"Навык" 				- python
-"Ссылка для скрапинга" 	- https://career.habr.com/vacancies?q=python&sort=date&type=all
-"Скрапинг на сайте" 	- соответственно выбираем из списка доступных https://career.habr.com
+"Навык"                 - python
+"Ссылка для скрапинга"  - https://career.habr.com/vacancies?q=python&sort=date&type=all
+"Скрапинг на сайте"     - соответственно выбираем из списка доступных https://career.habr.com
 
 для work.ua:
-"Навык" 				- python
-"Ссылка для скрапинга" 	- https://www.work.ua/ru/jobs-python/
-"Скрапинг на сайте" 	- выбираем https://www.work.ua
+"Навык"                 - python
+"Ссылка для скрапинга"  - https://www.work.ua/ru/jobs-python/
+"Скрапинг на сайте"     - выбираем https://www.work.ua
 ```
 
 2. **Второй вариант - Загрузка нужных данных в бд**
@@ -143,8 +143,7 @@ source env/bin/activate
 # только данные о сайтах (work.ua, career.habr.com) и навыках (python, web3)
 # этого будет достаточно для начала скрапинга
 python manage.py loaddata fixtures/vacancysite_vacancysource_db.json
-# все данные приложения vacancy: сайты, навыки и собранные c work.ua вакансии за 23.01.2024,
-# подойдёт для тестирования без запуска скрапинга вакансий:
+# все данные приложения vacancy: сайты, навыки и тестовые вакансии, подойдёт для тестирования:
 python manage.py loaddata fixtures/vacancy_full_db.json
 ```
 
