@@ -31,6 +31,7 @@ pip install -r requirements/local.txt
 cd django-scraping-vacancy/
 # если ещё не активировали, то активируем виртуальное окружение
 source env/bin/activate
+# если используется бд postgresql, то надо запустить её. для запуска в докере можно прочитать ниже.
 # для создания базы данных
 python manage.py migrate
 # создаём суперпользователя для входа в админсайт Django
