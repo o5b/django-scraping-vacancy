@@ -143,7 +143,7 @@ source env/bin/activate
 # только данные о сайтах (work.ua, career.habr.com) и навыках (python, web3)
 # этого будет достаточно для начала скрапинга
 python manage.py loaddata fixtures/vacancysite_vacancysource_db.json
-# все данные приложения vacancy: сайты, навыки и тестовые вакансии, подойдёт для тестирования:
+# все данные приложения vacancy (сайты, навыки и немного вакансий) подойдёт для тестирования:
 python manage.py loaddata fixtures/vacancy_full_db.json
 ```
 
