@@ -55,6 +55,50 @@ python manage.py runserver localhost:8000
 # админсайт http://127.0.0.1:8000/admin/
 ```
 
+### Celery
+
+Выполнение скрапинга можно передать `Celery`. В качестве брокера сообщений используется бд `Redis`. Redis может быть установлен на компьютер или запущен в докере.
+
+Если используется бд `sqlite3` то при работе с `celery` может появиться ошибка `database is locked`. Чтобы избежать этого можно установить бд `Postgresql`. Для запуска в докере:
+
+```bash
+# переходим в папку проекта
+cd django-scraping-vacancy/
+# если ещё не запустили, то запускаем виртуальное окружение
+source env/bin/activate
+cd compose/
+# запуск redis, postgresql и pgadmin4:
+docker-compose -f docker-compose.yml up -d
+# для остановки:
+docker-compose -f docker-compose.yml down -v
+```
+
+В файле настроек `local_settings.py` нужно указать бд `postgresql`.
+
+После запуска `Redis` в другой консоли нужно запустить `Django`:
+
+```bash
+# переходим в папку проекта
+cd django-scraping-vacancy/
+# если ещё не активировали, то активируем виртуальное окружение
+source env/bin/activate
+# запуск сервера
+python manage.py runserver localhost:8000
+```
+
+Запуск `Celery` в отдельной консоли:
+
+```bash
+# переходим в папку проекта
+cd django-scraping-vacancy/
+# если ещё не активировали, то активируем виртуальное окружение
+source env/bin/activate
+# команда для запуска Celery:
+celery -A settings worker -l INFO
+# для параллельного скрапинга, например с work.ua и хабр карьера, чтобы каждого бота обрабатывал свой Woker:
+celery -A settings worker -l INFO -O fair
+```
+
 ## Скрапинг вакансий
 
 *На данный момент доступен скрапинг вакансии с таких сайтов:*
@@ -123,49 +167,6 @@ python manage.py scraping_vacancy --website https://career.habr.com --skill pyth
 
 На сайте администратора `Главная › Вакансии › Ссылки для скрапинга ›`, на странице конкретной ссылки для скрапинга (например: http://127.0.0.1:8000/admin/vacancy/scrapinglink/1/change/), есть кнопка `Начать скрапинг` для скрапинга вакансий по этой конкретной ссылке. Ход процесса можно отслеживать в терминале.
 
-### Celery
-
-Выполнение скрапинга можно передать `Celery`. В качестве брокера сообщений используется бд `Redis`. Redis может быть установлен на компьютер или запущен в докере.
-
-Если используется бд `sqlite3` то при работе с `celery` может появиться ошибка `database is locked`. Чтобы избежать этого можно установить бд `Postgresql`. Для запуска в докере:
-
-```bash
-# переходим в папку проекта
-cd django-scraping-vacancy/
-# если ещё не запустили, то запускаем виртуальное окружение
-source env/bin/activate
-cd compose/
-# запуск redis, postgresql и pgadmin4:
-docker-compose -f docker-compose.yml up -d
-# для остановки:
-docker-compose -f docker-compose.yml down -v
-```
-
-В файле настроек `local_settings.py` нужно указать бд `postgresql`.
-
-После запуска `Redis` в другой консоли нужно запустить `Django`:
-
-```bash
-# переходим в папку проекта
-cd django-scraping-vacancy/
-# если ещё не активировали, то активируем виртуальное окружение
-source env/bin/activate
-# запуск сервера
-python manage.py runserver localhost:8000
-```
-
-Запуск `Celery` в отдельной консоли:
-
-```bash
-# переходим в папку проекта
-cd django-scraping-vacancy/
-# если ещё не активировали, то активируем виртуальное окружение
-source env/bin/activate
-# команда для запуска Celery:
-celery -A settings worker -l INFO
-# для параллельного скрапинга, например с work.ua и хабр карьера, чтобы каждого бота обрабатывал свой Woker:
-celery -A settings worker -l INFO -O fair
-```
 
 ## Структура проекта
 
