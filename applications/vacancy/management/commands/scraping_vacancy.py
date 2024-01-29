@@ -1,8 +1,9 @@
 import logging
 from django.core.management.base import BaseCommand
 from applications.vacancy.models import VacancySite, ScrapingLink
-from applications.vacancy.parser.work_ua import ParserWorkUa
-from applications.vacancy.parser.career_habr_com import ParserCareerHabrCom
+# from applications.vacancy.parser.work_ua import ParserWorkUa
+# from applications.vacancy.parser.career_habr_com import ParserCareerHabrCom
+from applications.vacancy.tasks import (career_habr_com_vacancy_scraping, work_ua_vacancy_scraping)
 
 
 logger = logging.getLogger('parser')
@@ -30,7 +31,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         scraping_website = ''
-        bot = ''
+        # bot = ''
         url = ''
 
         if options['website']:
@@ -42,29 +43,43 @@ class Command(BaseCommand):
                     url = ScrapingLink.objects.filter(scraping_site=scraping_website, skill=options['skill']).first()
 
                 if url:
-                    if 'https://www.work.ua' in url.link:
-                        bot = ParserWorkUa(None, options['skill'])
-                    elif 'https://career.habr.com' in url.link:
-                        bot = ParserCareerHabrCom(None, options['skill'])
+                    # if 'https://www.work.ua' in url.link:
+                    #     bot = ParserWorkUa(None, options['skill'])
+                    # elif 'https://career.habr.com' in url.link:
+                    #     bot = ParserCareerHabrCom(None, options['skill'])
 
-                    if bot:
-                        try:
-                            bot.scraping()
-                        except Exception as er:
-                            error_msg = 'Scraping site: {0}, skill: {1} -> Finished Error: {2}'.format(
-                                options['website'],
-                                options['skill'],
-                                er,
-                            )
-                            print(error_msg)
-                            logger.error(error_msg)
-                    else:
-                        warning_msg = 'С этими данными не удаётся запустить процесс скрапинга, scraping-link: {}, skill: {}'.format(
-                            url.link,
+                    # if bot:
+                    #     try:
+                    #         bot.scraping()
+                    #     except Exception as er:
+                    #         error_msg = 'Scraping site: {0}, skill: {1} -> Finished Error: {2}'.format(
+                    #             options['website'],
+                    #             options['skill'],
+                    #             er,
+                    #         )
+                    #         print(error_msg)
+                    #         logger.error(error_msg)
+                    # else:
+                    #     warning_msg = 'С этими данными не удаётся запустить процесс скрапинга, scraping-link: {}, skill: {}'.format(
+                    #         url.link,
+                    #         options['skill'],
+                    #     )
+                    #     print(warning_msg)
+                    #     logger.warning(warning_msg)
+
+                    try:
+                        if 'https://www.work.ua' in url.link:
+                            work_ua_vacancy_scraping.delay(None, options['skill'])
+                        elif 'https://career.habr.com' in url.link:
+                            career_habr_com_vacancy_scraping.delay(None, options['skill'])
+                    except Exception as er:
+                        error_msg = 'Scraping site: {0}, skill: {1} -> Finished Error: {2}'.format(
+                            options['website'],
                             options['skill'],
+                            er,
                         )
-                        print(warning_msg)
-                        logger.warning(warning_msg)
+                        print(error_msg)
+                        logger.error(error_msg)
 
                 else:
                     skills_qrs = ScrapingLink.objects.filter(scraping_site=scraping_website).values('skill')

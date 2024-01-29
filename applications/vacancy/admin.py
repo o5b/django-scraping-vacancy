@@ -5,8 +5,9 @@ from import_export.admin import ExportActionModelAdmin
 from applications.core.admin import CommonAdmin
 from applications.vacancy import resources
 from applications.vacancy.models import (Company, ScrapingLink, Vacancy, VacancySite)
-from applications.vacancy.parser.career_habr_com import ParserCareerHabrCom
-from applications.vacancy.parser.work_ua import ParserWorkUa
+# from applications.vacancy.parser.career_habr_com import ParserCareerHabrCom
+# from applications.vacancy.parser.work_ua import ParserWorkUa
+from applications.vacancy.tasks import (career_habr_com_vacancy_scraping, work_ua_vacancy_scraping)
 
 
 @admin.register(Vacancy)
@@ -55,16 +56,22 @@ class ScrapingLinkAdmin(DjangoObjectActions, admin.ModelAdmin):
     change_actions = ['vacancy_scraping']
 
     def vacancy_scraping(self,  request, obj):
+
         if 'https://www.work.ua' in obj.scraping_site.link:
-            bot = ParserWorkUa(obj.id, None)
+            work_ua_vacancy_scraping.delay(obj.id, None)
         elif 'https://career.habr.com' in obj.scraping_site.link:
-            bot = ParserCareerHabrCom(obj.id, None)
-        try:
-            bot.scraping()
-            messages.add_message(request, messages.SUCCESS, 'SUCCESS: Вакансии получены!')
-        except Exception as er:
-            print('Scraping: {0} -> finished Error: {1}'.format(obj.scraping_site.link, er))
-            messages.add_message(request, messages.ERROR, f'ERROR: {er}.')
+            career_habr_com_vacancy_scraping.delay(obj.id, None)
+
+        # if 'https://www.work.ua' in obj.scraping_site.link:
+        #     bot = ParserWorkUa(obj.id, None)
+        # elif 'https://career.habr.com' in obj.scraping_site.link:
+        #     bot = ParserCareerHabrCom(obj.id, None)
+        # try:
+        #     bot.scraping()
+        #     messages.add_message(request, messages.SUCCESS, 'SUCCESS: Вакансии получены!')
+        # except Exception as er:
+        #     print('Scraping: {0} -> finished Error: {1}'.format(obj.scraping_site.link, er))
+        #     messages.add_message(request, messages.ERROR, f'ERROR: {er}.')
 
     vacancy_scraping.label = 'Начать Скрапинг'
     vacancy_scraping.short_description = 'Скрапинг может занять много времени, в зависимости от количества вакансий'

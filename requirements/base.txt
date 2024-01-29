@@ -15,3 +15,6 @@ django-cleanup
 django-import-export
 setuptools
 pytz
+celery
+redis
+psycopg2-binary

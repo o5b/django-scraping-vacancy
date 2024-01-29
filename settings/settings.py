@@ -8,5 +8,6 @@ include(
     'components/logging.py',
     'components/ckeditor.py',
     'components/haystack.py',
+    'components/celery.py',
     optional('local_settings.py'),
 )
