@@ -18,3 +18,5 @@ pytz
 celery
 redis
 psycopg2-binary
+django-celery-results
+django-celery-beat

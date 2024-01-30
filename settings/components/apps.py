@@ -17,6 +17,8 @@ THIRD_APPS = [
     'django_object_actions',
     'haystack',
     'import_export',
+    'django_celery_results',
+    'django_celery_beat',
 ]
 
 CUSTOM_APPS = [
