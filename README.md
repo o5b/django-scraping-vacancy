@@ -22,6 +22,8 @@ pip install -r requirements/base.txt
 pip install -r requirements/local.txt
 ```
 
+![demo](doc/install_monokai.gif)
+
 ## Использование
 
 ### Запуск в докере контейнеров `redis` и `postgresql`
@@ -38,6 +40,8 @@ docker-compose -f docker-compose.yml up -d
 # для остановки:
 docker-compose -f docker-compose.yml down -v
 ```
+
+![demo](doc/docker_monokai.gif)
 
 ### Подготовка перед первым использованием
 
@@ -58,6 +62,8 @@ python manage.py collectstatic
 python manage.py rebuild_index
 ```
 
+![demo](doc/init_monokai.gif)
+
 ### Запуск сервера
 
 В отдельной консоли нужно запустить `Django`:
@@ -73,6 +79,8 @@ python manage.py runserver localhost:8000
 # админсайт:                          http://127.0.0.1:8000/admin/
 ```
 
+![demo](doc/runserver_monokai.gif)
+
 ### Запуск Celery
 
 В другой консоли запустим `Celery`:
@@ -87,6 +95,11 @@ celery -A settings worker -l INFO
 # для параллельного скрапинга, например с work.ua и хабр карьера,
 # чтобы каждого бота обрабатывал свой Woker, предыдущую комманду нужно запускать с опцией `-O fair`:
 celery -A settings worker -l INFO -O fair
+```
+
+![demo](doc/celery_monokai.gif)
+
+```bash
 # для запуска задач по расписанию (которые создаются в админк, в разделе `ПЕРИОДИЧЕСКИЕ ЗАДАЧИ`)
 # нужно помимо предыдущей команды, запустить в новой консоли следующую команду:
 celery -A settings beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
@@ -142,6 +155,8 @@ python manage.py loaddata fixtures/vacancysite_vacancysource_db.json
 python manage.py loaddata fixtures/vacancy_full_db.json
 ```
 
+![demo](doc/fixtures_monokai.gif)
+
 ### Запуск команды для скрапинга вакансий
 
 ```bash
@@ -154,6 +169,12 @@ python manage.py scraping_vacancy --help
 # нужно указать сайт и навык, например
 python manage.py scraping_vacancy --website https://career.habr.com --skill python
 ```
+
+![demo](doc/scraping_command_monokai.gif)
+
+В другой консоли должен быть запущен `celery`:
+
+![demo](doc/scraping_command_celery_monokai.gif)
 
 ### Скрапинга вакансий через сайт администратора
 
