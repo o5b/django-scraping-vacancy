@@ -99,11 +99,14 @@ celery -A settings worker -l INFO -O fair
 
 ![demo](doc/celery_monokai.gif)
 
-```bash
+<!-- ```bash
 # для запуска задач по расписанию (которые создаются в админк, в разделе `ПЕРИОДИЧЕСКИЕ ЗАДАЧИ`)
 # нужно помимо предыдущей команды, запустить в новой консоли следующую команду:
 celery -A settings beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
 ```
+
+![demo](doc/celery_beat_add_interval-peek.gif)
+![demo](doc/celery_beat_add_periodic_task_peek.gif) -->
 
 ## Скрапинг вакансий
 
@@ -123,6 +126,8 @@ https://career.habr.com
 https://www.work.ua
 ```
 
+![demo](doc/add_site-peek.gif)
+
 ```
 Затем добавляем ссылку для скрапинга нужного навыка на странице:
 http://127.0.0.1:8000/admin/vacancy/scrapinglink/
@@ -139,6 +144,8 @@ http://127.0.0.1:8000/admin/vacancy/scrapinglink/
 "Ссылка для скрапинга"  - https://www.work.ua/ru/jobs-python/
 "Скрапинг на сайте"     - выбираем: https://www.work.ua
 ```
+
+![demo](doc/add_web3_scraping_link-peek.gif)
 
 2. **Второй вариант - Загрузка нужных данных в бд**
 
@@ -176,13 +183,25 @@ python manage.py scraping_vacancy --website https://career.habr.com --skill pyth
 
 ![demo](doc/scraping_command_celery_monokai.gif)
 
-### Скрапинга вакансий через сайт администратора
+### Периодические задачи для Скрапинга
+
+Создаём интервал:
+![demo](doc/celery_beat_add_interval-peek.gif)
+Создаём периодическую задачу:
+![demo](doc/celery_beat_add_periodic_task_peek.gif)
+
+```bash
+# запускаем celery:
+celery -A settings worker -l INFO -O fair
+# в новой консоли нужно так же запустить celery-beat:
+celery -A settings beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+```
+
+### Скрапинг вакансий через сайт администратора
 
 На сайте администратора `Главная › Вакансии › Ссылки для скрапинга ›`, на странице конкретной ссылки для скрапинга (например: http://127.0.0.1:8000/admin/vacancy/scrapinglink/1/change/), есть кнопка `Начать скрапинг` для скрапинга вакансий по этой конкретной ссылке. Ход процесса можно отслеживать в терминале.
 
-### Создание периодических задач для скрапинга с помощью django-celery-beat
-
-В админке (http://localhost:8000/admin/django_celery_beat/periodictask/add/) можно создать периодическую задачу.
+![demo](doc/admin_scraping-peek.gif)
 
 ## Структура проекта
 
